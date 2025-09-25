@@ -56,6 +56,19 @@ roles = sqlalchemy.Table(
     sqlalchemy.Column("create_at",  sqlalchemy.String),
 )
 
+## Create a Project Table
+projects = sqlalchemy.Table(
+    "projects",
+    metadata,
+    sqlalchemy.Column("project_id",    sqlalchemy.Integer, sqlalchemy.Identity(), primary_key=True),
+    sqlalchemy.Column("project_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("gms_manager",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("lead_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("pod_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("trainer_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("create_at",  sqlalchemy.String),
+)
+
 
 
 engine = sqlalchemy.create_engine(
