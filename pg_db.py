@@ -1,7 +1,11 @@
 import databases, sqlalchemy
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ## Postgres Database
-DATABASE_URL = "postgresql://postgres:Pathak%40123@localhost:5432/GMS_database"
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:Pathak%40123@localhost:5432/GMS_database")
 
 database = databases.Database(DATABASE_URL)
 metadata = sqlalchemy.MetaData()
@@ -10,7 +14,7 @@ metadata = sqlalchemy.MetaData()
 users = sqlalchemy.Table(
     "users",
     metadata,
-    sqlalchemy.Column("id"        , sqlalchemy.String, primary_key=True, auto_increment=True),
+    sqlalchemy.Column("id"        , sqlalchemy.String, primary_key=True),
     sqlalchemy.Column("username"  , sqlalchemy.String),
     sqlalchemy.Column("password"  , sqlalchemy.String),
     sqlalchemy.Column("first_name", sqlalchemy.String),
@@ -47,7 +51,7 @@ employees = sqlalchemy.Table(
 roles = sqlalchemy.Table(
     "roles",
     metadata,
-    sqlalchemy.Column("role_id",    sqlalchemy.String, primary_key=True, auto_increment=True),
+    sqlalchemy.Column("role_id",    sqlalchemy.String, primary_key=True),
     sqlalchemy.Column("role_name",  sqlalchemy.String, unique=True, nullable=False),
     sqlalchemy.Column("create_at",  sqlalchemy.String),
 )

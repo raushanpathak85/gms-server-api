@@ -1,6 +1,7 @@
 import datetime, uuid
-from schema.employees import EmployeesDelete,EmployeesEntry,EmployeesUpdate
-from pg_db import database,employees
+import sqlalchemy
+from schema.employees import EmployeesEntry,EmployeesUpdate
+from pg_db import database,employees, roles
 from passlib.context import CryptContext
  
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -13,8 +14,24 @@ class EmployeesCurdOperation:
     ## All employees
     @staticmethod
     async def find_all_employees():
-        query = employees.select()
-        return await database.fetch_all(query)
+        query = sqlalchemy.select(
+            employees,
+            roles.c.role_name
+        ).join(
+            roles,
+            employees.c.role == roles.c.role_id
+        )
+
+        result = await database.fetch_all(query)
+    
+        # Convert to list of dictionaries with role_name included
+        return [
+            {
+                **dict(row),
+                "role_name": row["role_name"],  # Add role_name to response
+            }
+            for row in result
+        ]
     
     ## All employees with ID and Name
     @staticmethod
@@ -73,23 +90,37 @@ class EmployeesCurdOperation:
         ) 
 
         await database.execute(query)
-        return {
-            **employee.dict(),
-            "create_at":gDate,
-            "status": "1"
-        }
+        return await EmployeesCurdOperation.find_employees_by_id(employee.employees_id)
+    
     ## Find Employees by ID
     @staticmethod
     async def find_employees_by_id(employees_id: str):
-        query = employees.select().where(employees.c.employees_id == employees_id)
-        return await database.fetch_one(query)
+        query = (
+            sqlalchemy.select(
+                employees,
+                roles.c.role_name
+            )
+            .join(
+                roles,
+                employees.c.role == roles.c.role_id
+            )
+            .where(employees.c.employees_id == employees_id)
+        )
+        result = await database.fetch_one(query)
+        
+        if result:
+            return {
+                **dict(result),
+                "role_name": result["role_name"]
+            }
+        return None
 
     ## Employees update
     @staticmethod
-    async def update_employees(employee: EmployeesUpdate):
+    async def update_employees(employees_id: str, employee: EmployeesUpdate):
         gDate = str(datetime.datetime.now())
         query = employees.update().\
-            where(employees.c.employees_id == employee.employees_id).\
+            where(employees.c.employees_id == employees_id).\
             values(
                 first_name     = employee.first_name,
                 last_name      = employee.last_name,
@@ -109,11 +140,10 @@ class EmployeesCurdOperation:
         await database.execute(query)
 
         # ✅ Fetch and return updated employee
-        return await EmployeesCurdOperation.find_employees_by_id(employee.employees_id)
+        return await EmployeesCurdOperation.find_employees_by_id(employees_id)
 
 
     ## Employees Delete
-## Employees Delete
     @staticmethod
     async def delete_employee(employeeId: str):
         # 1. Check if employee exists
@@ -126,3 +156,4 @@ class EmployeesCurdOperation:
         await database.execute(query)
 
         return {"status": True, "message": "Employee has been deleted successfully."}
+    

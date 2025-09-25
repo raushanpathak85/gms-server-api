@@ -1,5 +1,5 @@
 import datetime, uuid
-from schema.roles import RolesDelete,RolesEntry,RolesUpdate
+from schema.roles import RolesEntry,RolesUpdate
 from pg_db import database,roles
 
 
@@ -36,15 +36,15 @@ class RolesCurdOperation:
     
     ## Update roles
     @staticmethod
-    async def update_role(role: RolesUpdate):
+    async def update_role(role_id: str, role: RolesUpdate):
         # Update record
-        query = roles.update().where(roles.c.role_id == role.role_id).values(
+        query = roles.update().where(roles.c.role_id == role_id).values(
             role_name=role.role_name
         )
         await database.execute(query)
 
         # ✅ Fetch the updated record
-        select_query = roles.select().where(roles.c.role_id == role.role_id)
+        select_query = roles.select().where(roles.c.role_id == role_id)
         updated_role = await database.fetch_one(select_query)
 
         return {
@@ -56,7 +56,7 @@ class RolesCurdOperation:
     
     ## Delete roles
     @staticmethod
-    async def delete_role(role: RolesDelete):
-        query = roles.delete().where(roles.c.role_id == role.role_id)
+    async def delete_role(role_id: str):
+        query = roles.delete().where(roles.c.role_id == role_id)
         await database.execute(query)
         return {"message": "Role deleted successfully"}

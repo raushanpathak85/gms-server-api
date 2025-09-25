@@ -10,6 +10,7 @@ class EmployeesList(BaseModel):
     gender              : str
     designation         : str
     role                : str
+    role_name           : str
     skill               : str
     experience          : str
     qualification       : str
@@ -23,7 +24,7 @@ class EmployeesEntry(BaseModel):
     last_name           : str = Field(..., example="Sambo")
     email               : str = Field(..., example="Sambo")
     phone               : str = Field(..., example="Sambo")
-    gender              : str = Field(..., example="M")
+    gender              : str = Field(..., example="Male")
     designation         : str = Field(..., example="Designation")
     role                : str = Field(...,example="Trainer")
     skill               : str = Field(...,example="Skill")
@@ -32,7 +33,6 @@ class EmployeesEntry(BaseModel):
     state               : str = Field(...,example="State")
     city                : str = Field(...,example="City")
 class EmployeesUpdate(BaseModel):
-    employees_id        : str = Field(..., example="Enter your emp code")
     first_name          : str = Field(..., example="Potine")
     last_name           : str = Field(..., example="Sambo")
     email               : str = Field(..., example="Sambo")
@@ -46,5 +46,3 @@ class EmployeesUpdate(BaseModel):
     state               : str = Field(...,example="State")
     city                : str = Field(...,example="City")
     status              : str = Field(..., example="1")
-class EmployeesDelete(BaseModel):
-    employees_id: str = Field(..., example="Enter your emp code")

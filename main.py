@@ -1,7 +1,7 @@
 from curd.roles import RolesCurdOperation
 from schema.users import UserList,UserUpdate,UserLogin
-from schema.employees import EmployeesList,EmployeesUpdate
-from schema.roles import RolesList, RolesEntry, RolesUpdate, RolesDelete
+from schema.employees import EmployeesList,EmployeesUpdate, EmployeesEntry
+from schema.roles import RolesList, RolesEntry, RolesUpdate
 from curd.users import UserCurdOperation
 from curd.employees import EmployeesCurdOperation
 from fastapi import FastAPI,Request,HTTPException,status
@@ -58,7 +58,7 @@ async def find_all_users():
 
 # Register user
 @app.post("/users", response_model=UserList, tags=["Users"])
-async def register_user(user: UserList):
+async def register_user(user: EmployeesEntry):
     return await UserCurdOperation.register_user(user)
 
 # Get user by ID
@@ -82,7 +82,6 @@ async def delete_user(userId: str):
 # @app.post("/login", tags=["Users"])
 # async def login(user: UserLogin):
 #     return await UserCurdOperation.login(user)
-@app.post("/login", tags=["Users"])
 @app.post("/login", tags=["Users"])
 async def login(user: UserLogin):
     try:
@@ -124,8 +123,7 @@ async def find_employee_by_id(employeeId: str):
 # Update employee
 @app.put("/employees/{employeeId}", response_model=EmployeesList, tags=["Employees"])
 async def update_employee(employeeId: str, employee: EmployeesUpdate):
-    employee.employees_id = employeeId  # assign path param into request body
-    return await EmployeesCurdOperation.update_employees(employee)
+    return await EmployeesCurdOperation.update_employees(employeeId, employee)
 
 # Delete employee
 @app.delete("/employees/{employeeId}", tags=["Employees"])
@@ -158,10 +156,9 @@ async def register_role(role: RolesEntry):
 # Update role
 @app.put("/roles/{roleId}", response_model=RolesList, tags=["Roles"])
 async def update_role(roleId: str, role: RolesUpdate):
-    role.role_id = roleId  # assign path param into request body
-    return await RolesCurdOperation.update_role(role)
+    return await RolesCurdOperation.update_role(roleId, role)
 
 # Delete role
 @app.delete("/roles/{roleId}", tags=["Roles"])
 async def delete_role(roleId: str):
-    return await RolesCurdOperation.delete_role(RolesDelete(role_id=roleId))
+    return await RolesCurdOperation.delete_role(roleId)
