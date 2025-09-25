@@ -1,7 +1,8 @@
 import databases, sqlalchemy
 
 ## Postgres Database
-DATABASE_URL = "postgresql://gms_server_database_user:xAJMcH21ibrri3OpltVTrvqQR04SbtJO@dpg-d38irepr0fns7381pdl0-a.oregon-postgres.render.com/gms_server_database"
+DATABASE_URL = "postgresql://postgres:Pathak%40123@localhost:5432/GMS_database"
+
 
 
 database = databases.Database(DATABASE_URL)
@@ -48,8 +49,21 @@ employees = sqlalchemy.Table(
 roles = sqlalchemy.Table(
     "roles",
     metadata,
-    sqlalchemy.Column("role_id",    sqlalchemy.String, primary_key=True, auto_increment=True),
+    sqlalchemy.Column("role_id",    sqlalchemy.String, primary_key=True),
     sqlalchemy.Column("role_name",  sqlalchemy.String, unique=True, nullable=False),
+    sqlalchemy.Column("create_at",  sqlalchemy.String),
+)
+
+## Create a Project Table
+projects = sqlalchemy.Table(
+    "projects",
+    metadata,
+    sqlalchemy.Column("project_id",    sqlalchemy.Integer, sqlalchemy.Identity(), primary_key=True),
+    sqlalchemy.Column("project_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("gms_manager",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("lead_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("pod_name",  sqlalchemy.String, nullable=False),
+    sqlalchemy.Column("trainer_name",  sqlalchemy.String, nullable=False),
     sqlalchemy.Column("create_at",  sqlalchemy.String),
 )
 

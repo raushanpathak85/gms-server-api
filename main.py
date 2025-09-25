@@ -2,8 +2,10 @@ from curd.roles import RolesCurdOperation
 from schema.users import UserList,UserUpdate,UserLogin
 from schema.employees import EmployeesList,EmployeesUpdate
 from schema.roles import RolesList, RolesEntry, RolesUpdate, RolesDelete
+from schema.projects import ProjectsList, ProjectsEntry, ProjectsUpdate, ProjectsDelete
 from curd.users import UserCurdOperation
 from curd.employees import EmployeesCurdOperation
+from curd.projects import ProjectsCurdOperation
 from fastapi import FastAPI,Request,HTTPException,status
 from fastapi.responses import JSONResponse
 from typing import List
@@ -165,3 +167,30 @@ async def update_role(roleId: str, role: RolesUpdate):
 @app.delete("/roles/{roleId}", tags=["Roles"])
 async def delete_role(roleId: str):
     return await RolesCurdOperation.delete_role(RolesDelete(role_id=roleId))
+
+## ------------------------------------Projects Endpoints-----------------------------
+
+# Get all projects
+@app.get("/projects", response_model=List[ProjectsList], tags=["Project Details"])
+async def find_all_projects():
+    return await ProjectsCurdOperation.find_all_projects()
+
+# Register role
+@app.post("/projects", response_model=ProjectsEntry, tags=["Project Details"])
+async def register_project(project: ProjectsEntry):
+    return await ProjectsCurdOperation.register_projects(project)
+
+# Get project by ID
+@app.get("/projects/{project_Id}", response_model=ProjectsList, tags=["Project Details"])
+async def find_project_by_id(project_Id: int):
+    return await ProjectsCurdOperation.find_project_by_id(project_Id)
+
+# Update project
+@app.put("/projects/{project_Id}", response_model=ProjectsUpdate, tags=["Project Details"])
+async def update_project(project_id: int, project: ProjectsUpdate):
+    return await ProjectsCurdOperation.update_project(project_id, project)
+
+# Delete role
+@app.delete("/projects/{project_Id}", tags=["Project Details"])
+async def delete_project(project_Id: str):
+    return await ProjectsCurdOperation.delete_project(ProjectsDelete(project_id=project_Id))
