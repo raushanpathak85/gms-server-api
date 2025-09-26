@@ -22,8 +22,7 @@ class UserUpdate(BaseModel):
     last_name : str = Field(..., example="Sambo")
     gender    : str = Field(..., example="M")
     status    : str = Field(..., example="1")
-class UserDelete(BaseModel):
-    id: str = Field(..., example="Enter your id")
+
 
 class UserLogin(BaseModel):
     username  : str
