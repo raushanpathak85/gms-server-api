@@ -60,7 +60,7 @@ roles = sqlalchemy.Table(
 projects = sqlalchemy.Table(
     "projects",
     metadata,
-    sqlalchemy.Column("project_id",    sqlalchemy.Integer, sqlalchemy.Identity(), primary_key=True),
+    sqlalchemy.Column("project_id",    sqlalchemy.Integer, sqlalchemy.Identity(start=101,cycle=True), primary_key=True),
     sqlalchemy.Column("project_name",  sqlalchemy.String, nullable=False),
     sqlalchemy.Column("gms_manager",  sqlalchemy.String, nullable=False),
     sqlalchemy.Column("lead_name",  sqlalchemy.String, nullable=False),
