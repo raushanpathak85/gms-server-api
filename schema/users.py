@@ -16,6 +16,7 @@ class UserEntry(BaseModel):
     first_name: str = Field(..., example="Potine")
     last_name : str = Field(..., example="Sambo")
     gender    : str = Field(..., example="M")
+    status    : str = Field(..., example="1 or 0")
 class UserUpdate(BaseModel):
     id        : str = Field(..., example="Enter your id")
     first_name: str = Field(..., example="Potine")
