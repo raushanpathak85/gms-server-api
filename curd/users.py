@@ -31,7 +31,7 @@ class UserCurdOperation:
             last_name  = user.last_name,
             gender     = user.gender,
             create_at  = gDate,
-            status     = "1"
+            status     = user.status,
         ) 
 
         await database.execute(query)
