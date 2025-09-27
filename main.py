@@ -1,5 +1,5 @@
 from curd.roles import RolesCurdOperation
-from schema.users import UserList,UserUpdate,UserLogin
+from schema.users import UserList,UserUpdate,UserLogin,UserEntry
 from schema.employees import EmployeesList,EmployeesUpdate, EmployeesEntry
 from schema.roles import RolesList, RolesEntry, RolesUpdate
 from schema.projects import ProjectsList, ProjectsEntry, ProjectsUpdate, ProjectsDelete
@@ -62,7 +62,7 @@ async def find_all_users():
 
 # Register user
 @app.post("/users", response_model=UserList, tags=["Users"])
-async def register_user(user: EmployeesEntry):
+async def register_user(user: UserEntry):
     return await UserCurdOperation.register_user(user)
 
 # Get user by ID
@@ -73,7 +73,7 @@ async def find_user_by_id(userId: str):
 
 # Update user
 @app.put("/users/{userId}", response_model=UserList, tags=["Users"])
-async def update_user(userId: str, user: UserList):
+async def update_user(userId: str, user: UserUpdate):
     user.id = userId  # assign path param to body
     return await UserCurdOperation.update_user(user)
 

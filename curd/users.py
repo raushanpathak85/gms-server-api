@@ -1,5 +1,5 @@
 import datetime, uuid
-from schema.users import UserEntry,UserList,UserDelete,UserLogin,UserUpdate
+from schema.users import UserEntry,UserList,UserLogin,UserUpdate
 from pg_db import database,users
 from fastapi import HTTPException
 from passlib.context import CryptContext
