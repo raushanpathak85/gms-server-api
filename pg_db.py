@@ -29,7 +29,7 @@ employees = sqlalchemy.Table(
     "employees",
     metadata,
 
-    sqlalchemy.Column("employees_id"        , sqlalchemy.String, nullable=False, unique=True),
+    sqlalchemy.Column("employees_id"        , sqlalchemy.String, primary_key=True),
     sqlalchemy.Column("first_name"          , sqlalchemy.String),
     sqlalchemy.Column("last_name"           , sqlalchemy.String),
     sqlalchemy.Column("email"               , sqlalchemy.String),
@@ -69,6 +69,23 @@ projects = sqlalchemy.Table(
     sqlalchemy.Column("create_at",  sqlalchemy.String),
 )
 
+## Create a task_monitor table
+task_monitors = sqlalchemy.Table(
+    "task_monitors",
+    metadata,
+    sqlalchemy.Column("task_id",           sqlalchemy.Integer, sqlalchemy.Identity(start=1,cycle=True), primary_key=True),
+    sqlalchemy.Column("employees_id",      sqlalchemy.String,sqlalchemy.ForeignKey("employees.employees_id")),
+    sqlalchemy.Column("project_id",        sqlalchemy.Integer,sqlalchemy.ForeignKey("projects.project_id")),
+    sqlalchemy.Column("date",          	   sqlalchemy.Date, nullable=False),
+    sqlalchemy.Column("task_completed",    sqlalchemy.Integer, nullable=False, server_default="0"),
+    sqlalchemy.Column("task_inprogress",   sqlalchemy.Integer, nullable=False, server_default="0"),
+    sqlalchemy.Column("task_reworked",     sqlalchemy.Integer, nullable=False, server_default="0"),
+    sqlalchemy.Column("task_approved",     sqlalchemy.Integer, nullable=False, server_default="0"),
+    sqlalchemy.Column("task_rejected",     sqlalchemy.Integer, nullable=False, server_default="0"),
+    sqlalchemy.Column("task_reviewed",     sqlalchemy.Integer, nullable=False, server_default="0"), ## How many task reviewed by POD/Reviewer
+    sqlalchemy.Column("hours_logged",      sqlalchemy.DECIMAL(4, 2), nullable=False, server_default="0.0"),
+    
+)
 
 
 engine = sqlalchemy.create_engine(

@@ -3,8 +3,10 @@ from schema.users import UserList,UserUpdate,UserLogin
 from schema.employees import EmployeesList,EmployeesUpdate, EmployeesEntry
 from schema.roles import RolesList, RolesEntry, RolesUpdate
 from schema.projects import ProjectsList, ProjectsEntry, ProjectsUpdate, ProjectsDelete
+from schema.task_monitors import TaskMonitorBase, TaskMonitorCreate, TaskMonitorUpdate
 from curd.users import UserCurdOperation
 from curd.employees import EmployeesCurdOperation
+from curd.task_monitors import TaskMonitorsCurd
 from curd.projects import ProjectsCurdOperation
 from fastapi import FastAPI,Request,HTTPException,status
 from fastapi.responses import JSONResponse
@@ -191,3 +193,25 @@ async def update_project(project_id: int, project: ProjectsUpdate):
 @app.delete("/projects/{project_Id}", tags=["Project Details"])
 async def delete_project(project_Id: str):
     return await ProjectsCurdOperation.delete_project(ProjectsDelete(project_id=project_Id))
+
+## ------------------------------------Task Monitors Endpoints-----------------------------
+
+# Get all Tasks
+@app.get("/task", response_model=List[TaskMonitorBase], tags=["Task Monitors"])
+async def find_all_task():
+    return await TaskMonitorsCurd.find_all_task()
+
+# Register tasks
+@app.post("/task", response_model=TaskMonitorCreate, tags=["Task Monitors"])
+async def register_task(task: TaskMonitorCreate):
+    return await TaskMonitorsCurd.register_task(task)
+
+# # Get project by ID
+# @app.get("/projects/{project_Id}", response_model=ProjectsList, tags=["Project Details"])
+# async def find_project_by_id(project_Id: int):
+#     return await ProjectsCurdOperation.find_project_by_id(project_Id)
+
+# Update Task
+@app.put("/task/{task_Id}", response_model=TaskMonitorUpdate, tags=["Task Monitors"])
+async def update_task(task_id: int, task: TaskMonitorUpdate):
+    return await TaskMonitorsCurd.update_task(task_id, task)
