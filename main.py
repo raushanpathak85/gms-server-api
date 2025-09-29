@@ -139,11 +139,6 @@ async def delete_employee(employeeId: str):
 async def find_all_employees_name():
     return await EmployeesCurdOperation.find_all_employees_name()
 
-# Get all managers names and ids
-@app.get("/manager_names", tags=["Employees"])
-async def find_all_managers_name():
-    return await EmployeesCurdOperation.all_managers_name()
-
 
 ## ------------------------------------Roles Endpoints-----------------------------
 
