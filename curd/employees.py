@@ -36,16 +36,21 @@ class EmployeesCurdOperation:
     ## All employees with ID, Name, Role
     @staticmethod
     async def find_all_employees_name():
-        query = employees.select().with_only_columns(
-            employees.c.employees_id, 
-            employees.c.first_name, 
-            employees.c.last_name
+        query = (
+            sqlalchemy.select(
+                employees.c.employees_id,
+                employees.c.first_name,
+                employees.c.last_name,
+                roles.c.role_name
+            )
+            .join(roles, employees.c.role == roles.c.role_id)
         )
         result = await database.fetch_all(query)
         return [
             {
                 "employees_id": row["employees_id"],
-                "full_name": f"{row['first_name']} {row['last_name']}"
+                "full_name": f"{row['first_name']} {row['last_name']}",
+                "role_name": row["role_name"],
             }
             for row in result
         ]

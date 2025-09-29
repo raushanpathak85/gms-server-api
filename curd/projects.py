@@ -28,12 +28,13 @@ class ProjectsCurdOperation:
             trainer_name=project.trainer_name,
             create_at=gDate
         )
-        await database.execute(query)
+        row = await database.execute(query)
 
         # ✅ include role_id in the response
         return {
+            "project_id": row["project_id"],
             **project.dict(),
-            "create_at":gDate,
+            "create_at": row["create_at"],
              
         }
     ## Find project by ID

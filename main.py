@@ -186,8 +186,8 @@ async def find_project_by_id(project_Id: int):
 
 # Update project
 @app.put("/projects/{project_Id}", response_model=ProjectsUpdate, tags=["Project Details"])
-async def update_project(project_id: int, project: ProjectsUpdate):
-    return await ProjectsCurdOperation.update_project(project_id, project)
+async def update_project(project_Id: int, project: ProjectsUpdate):
+    return await ProjectsCurdOperation.update_project(project_Id, project)
 
 # Delete role
 @app.delete("/projects/{project_Id}", tags=["Project Details"])
