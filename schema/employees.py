@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 ## Model for Employees Table
@@ -10,13 +11,14 @@ class EmployeesList(BaseModel):
     gender              : str
     designation         : str
     role                : str
-    role_name           : str
+    role_name           : Optional[str] = None
     skill               : str
     experience          : str
     qualification       : str
     state               : str
     city                : str
     create_at           : str
+    inactive_at         : str | None = None
     status              : str
 class EmployeesEntry(BaseModel):
     employees_id        : str = Field(..., example="potinejj")
@@ -45,4 +47,5 @@ class EmployeesUpdate(BaseModel):
     qualification       : str = Field(...,example="Qualification")
     state               : str = Field(...,example="State")
     city                : str = Field(...,example="City")
+    inactive_at         : str | None = None
     status              : str = Field(..., example="1")

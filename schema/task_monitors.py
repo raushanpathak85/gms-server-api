@@ -4,20 +4,29 @@ from datetime import date
 from decimal import Decimal
 
 # define alias for constrained decimal
-HoursLogged = Annotated[Decimal, Field(max_digits=4, decimal_places=2)]
+HoursLogged = Annotated[Decimal, Field(max_digits=4, decimal_places=2, ge=0.00)]
+
+# define alias for constrained int (non-negative)
+NonNegativeInt = Annotated[int, Field(ge=0)]
 
 class TaskMonitorBase(BaseModel):
+    """Base schema for task monitor response"""
     task_id         :int
     employees_id    : str
     project_id      : int
     date            : date
-    task_completed  : int = 0
-    task_inprogress : int = 0
-    task_reworked   : int = 0
-    task_approved   : int = 0
-    task_rejected   : int = 0
-    task_reviewed   : int = 0
+    task_completed  : NonNegativeInt = 0
+    task_inprogress : NonNegativeInt = 0
+    task_reworked   : NonNegativeInt = 0
+    task_approved   : NonNegativeInt = 0
+    task_rejected   : NonNegativeInt = 0
+    task_reviewed   : NonNegativeInt = 0
     hours_logged    : HoursLogged = 0.00  # matches DECIMAL(4,2)
+    project_name    : Optional[str]
+    manager         : Optional[str]
+    lead            : Optional[str]
+    pod_lead        : Optional[str]
+    trainer_name    : Optional[str]
 
 
 class TaskMonitorCreate(BaseModel):
@@ -25,12 +34,12 @@ class TaskMonitorCreate(BaseModel):
     employees_id    : str
     project_id      : int
     date            : date
-    task_completed  : int = 0
-    task_inprogress : int = 0
-    task_reworked   : int = 0
-    task_approved   : int = 0
-    task_rejected   : int = 0
-    task_reviewed   : int = 0
+    task_completed  : NonNegativeInt = 0
+    task_inprogress : NonNegativeInt = 0
+    task_reworked   : NonNegativeInt = 0
+    task_approved   : NonNegativeInt = 0
+    task_rejected   : NonNegativeInt = 0
+    task_reviewed   : NonNegativeInt = 0
     hours_logged    : HoursLogged = 0.00  # matches DECIMAL(4,2)
 
 
@@ -40,13 +49,13 @@ class TaskMonitorUpdate(BaseModel):
     employees_id    : str
     project_id      : int
     date            : date
-    task_completed  : Optional[int] = None
-    task_inprogress : Optional[int] = None
-    task_reworked   : Optional[int] = None
-    task_approved   : Optional[int] = None
-    task_rejected   : Optional[int] = None
-    task_reviewed   : Optional[int] = None
-    hours_logged    : Optional[HoursLogged] = None
+    task_completed  : Optional[NonNegativeInt] = 0
+    task_inprogress : Optional[NonNegativeInt] = 0
+    task_reworked   : Optional[NonNegativeInt] = 0
+    task_approved   : Optional[NonNegativeInt] = 0
+    task_rejected   : Optional[NonNegativeInt] = 0
+    task_reviewed   : Optional[NonNegativeInt] = 0
+    hours_logged    : Optional[HoursLogged] = 0.00
 
 
 

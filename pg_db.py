@@ -43,7 +43,8 @@ employees = sqlalchemy.Table(
     sqlalchemy.Column("state"               , sqlalchemy.String),
     sqlalchemy.Column("city"                , sqlalchemy.String),
     sqlalchemy.Column("create_at"           , sqlalchemy.String),
-    sqlalchemy.Column("status"              , sqlalchemy.CHAR  ),
+    sqlalchemy.Column("inactive_at"         , sqlalchemy.String, nullable=True),
+    sqlalchemy.Column("status"              , sqlalchemy.CHAR),
 )
 
 
@@ -67,6 +68,8 @@ projects = sqlalchemy.Table(
     sqlalchemy.Column("pod_name",  sqlalchemy.String, nullable=False),
     sqlalchemy.Column("trainer_name",  sqlalchemy.String, nullable=False),
     sqlalchemy.Column("create_at",  sqlalchemy.String),
+    sqlalchemy.Column("status",  sqlalchemy.CHAR, nullable=False, server_default="1"),
+    sqlalchemy.Column("inactive_at",  sqlalchemy.Date, nullable=True),
 )
 
 ## Create a task_monitor table
@@ -84,7 +87,6 @@ task_monitors = sqlalchemy.Table(
     sqlalchemy.Column("task_rejected",     sqlalchemy.Integer, nullable=False, server_default="0"),
     sqlalchemy.Column("task_reviewed",     sqlalchemy.Integer, nullable=False, server_default="0"), ## How many task reviewed by POD/Reviewer
     sqlalchemy.Column("hours_logged",      sqlalchemy.DECIMAL(4, 2), nullable=False, server_default="0.0"),
-    
 )
 
 

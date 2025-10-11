@@ -1,4 +1,5 @@
 import datetime, uuid
+import sqlalchemy
 from schema.projects import ProjectsEntry,ProjectsDelete,ProjectsUpdate
 from pg_db import database,projects
 
@@ -29,13 +30,15 @@ class ProjectsCurdOperation:
             create_at=gDate
         )
         row = await database.execute(query)
+        print(row)
 
         # ✅ include role_id in the response
         return {
-            "project_id": row["project_id"],
             **project.dict(),
-            "create_at": row["create_at"],
-             
+            "project_id": row,
+            "create_at": gDate,
+            "status": project.status,
+            "inactive_at": project.inactive_at
         }
     ## Find project by ID
     @staticmethod
@@ -62,3 +65,12 @@ class ProjectsCurdOperation:
         query = projects.delete().where(projects.c.project_id == project.project_id)
         await database.execute(query)
         return {"message": "Project ID deleted successfully"}
+    
+    ## Get Projects by Trainer Name
+    @staticmethod
+    async def get_projects_by_trainer(trainer_name: str):
+        query = sqlalchemy.select(projects.c).where(projects.c.trainer_name == trainer_name)
+        res = await database.fetch_all(query)
+        for row in res:
+            print(dict(row))
+        return res

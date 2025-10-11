@@ -8,6 +8,7 @@ from curd.users import UserCurdOperation
 from curd.employees import EmployeesCurdOperation
 from curd.task_monitors import TaskMonitorsCurd
 from curd.projects import ProjectsCurdOperation
+from curd.dashboard import DashboardCurdOperation
 from fastapi import FastAPI,Request,HTTPException,status
 from fastapi.responses import JSONResponse
 from typing import List
@@ -170,7 +171,7 @@ async def find_all_projects():
     return await ProjectsCurdOperation.find_all_projects()
 
 # Register role
-@app.post("/projects", response_model=ProjectsEntry, tags=["Project Details"])
+@app.post("/projects", response_model=ProjectsList, tags=["Project Details"])
 async def register_project(project: ProjectsEntry):
     return await ProjectsCurdOperation.register_projects(project)
 
@@ -189,15 +190,20 @@ async def update_project(project_Id: int, project: ProjectsUpdate):
 async def delete_project(project_Id: str):
     return await ProjectsCurdOperation.delete_project(ProjectsDelete(project_id=project_Id))
 
+# Get projects by Trainer Name
+@app.get("/projects/trainer/{trainer_name}", tags=["Project Details"])
+async def get_projects_by_trainer(trainer_name: str):
+    return await ProjectsCurdOperation.get_projects_by_trainer(trainer_name)
+
 ## ------------------------------------Task Monitors Endpoints-----------------------------
 
 # Get all Tasks
-@app.get("/task", response_model=List[TaskMonitorBase], tags=["Task Monitors"])
+@app.get("/tasks", response_model=List[TaskMonitorBase], tags=["Task Monitors"])
 async def find_all_task():
     return await TaskMonitorsCurd.find_all_task()
 
 # Register tasks
-@app.post("/task", response_model=TaskMonitorCreate, tags=["Task Monitors"])
+@app.post("/task", response_model=TaskMonitorBase, tags=["Task Monitors"])
 async def register_task(task: TaskMonitorCreate):
     return await TaskMonitorsCurd.register_task(task)
 
@@ -207,6 +213,14 @@ async def register_task(task: TaskMonitorCreate):
 #     return await ProjectsCurdOperation.find_project_by_id(project_Id)
 
 # Update Task
-@app.put("/task/{task_Id}", response_model=TaskMonitorUpdate, tags=["Task Monitors"])
+@app.put("/task/{task_Id}", response_model=TaskMonitorBase, tags=["Task Monitors"])
 async def update_task(task_id: int, task: TaskMonitorUpdate):
     return await TaskMonitorsCurd.update_task(task_id, task)
+
+
+## ------------------------------------Dashboard Endpoints-----------------------------
+
+# Get Dashboard Summary
+@app.get("/dashboard/summary", tags=["Dashboard"])
+async def get_dashboard_summary():
+    return await DashboardCurdOperation.get_dashboard_summary()

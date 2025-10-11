@@ -44,6 +44,7 @@ class EmployeesCurdOperation:
                 roles.c.role_name
             )
             .join(roles, employees.c.role == roles.c.role_id)
+            .where(employees.c.status == '1')
         )
         result = await database.fetch_all(query)
         return [
@@ -74,6 +75,7 @@ class EmployeesCurdOperation:
             state          =     employee.state, 
             city           =     employee.city,
             create_at      =     gDate,
+            inactive_at    =     None,
             status         =     "1"
         ) 
 
@@ -124,6 +126,7 @@ class EmployeesCurdOperation:
                 city           = employee.city,
                 status         = employee.status,
                 create_at      = gDate,
+                inactive_at    = employee.inactive_at if employee.inactive_at else None,
             )
         await database.execute(query)
 
