@@ -4,3 +4,9 @@ create database dbtest owner=usertest;
 
 --> How to run 
 # uvicorn main:app --reload
+
+--> How to make migration
+# alembic revision --autogenerate -m "{name of the changes}"
+
+--> How to migrate
+# alembic upgrade head
