@@ -65,7 +65,7 @@ employees = sa.Table(
     sa.Column("last_name", sa.String(100), nullable=True),
     sa.Column("email", sa.String(255), nullable=False),
     sa.Column("phone", sa.String(20), nullable=True),
-    sa.Column("gender", sa.String(10), nullable=True),
+    sa.Column("gender", sa.CHAR(1), nullable=True),
     sa.Column("designation", sa.String(100), nullable=True),
     sa.Column("role", sa.String(36), ForeignKey("roles.role_id", ondelete="SET NULL"), nullable=True),
     sa.Column("skill", sa.String(255), nullable=True),
@@ -94,12 +94,13 @@ projects = sa.Table(
     CheckConstraint("status in ('0','1')", name="ck_status_01"),
 )
 
+# PROJECT STAFFING
 project_staffing = sa.Table(
     "project_staffing",
     metadata,
     sa.Column("id", sa.BigInteger, sa.Identity(start=1, cycle=True), primary_key=True),
     sa.Column("project_id", sa.Integer, ForeignKey("projects.project_id", ondelete="CASCADE"), nullable=False),
-    sa.Column("employees_id", sa.String(50), ForeignKey("employees.employees_id", ondelete="SET NULL"), nullable=True),
+    sa.Column("employees_id", sa.String(50), ForeignKey("employees.employees_id", ondelete="CASCADE"), nullable=False),
     sa.Column("gms_manager", sa.String(150), nullable=True),
     sa.Column("t_manager", sa.String(150), nullable=True),
     sa.Column("pod_lead", sa.String(150), nullable=True),
